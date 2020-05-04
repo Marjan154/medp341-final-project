@@ -1,0 +1,32 @@
+[
+    {
+        "situation": "You have a test next week",
+        "optionBad": "Your'e gonna fail anyways",
+        "optionGood": "I just have to do what I can"
+    },
+    {
+        "situation": "You have an audition tomorrow",
+        "optionBad": "What if they laugh at you",
+        "optionGood": "I practiced and I just have to trust in myself."
+    },
+    {
+        "situation": "You have a group project",
+        "optionBad": "Communicating with others is impossible",
+        "optionGood": "I just have to plan and manage time with the others as best as I can"
+    },
+    {
+        "situation": "You have homework tonight",
+        "optionBad": "I said I would start at 6 but it's 6:01 now and it's too late, guess I'll start at 7",
+        "optionGood": "I have to prioritze doing my homework"
+    },
+    {
+        "situation": "You have an interview later",
+        "optionBad": "You're gonna fail anyways",
+        "optionGood": "The worst that can happen is I get rejected, but I will gain valuable experience"
+    },
+    {
+        "situation": "You need to apply for your school",
+        "optionBad": "I'll never beat the competition",
+        "optionGood": "I have just as much as a chance as everyone else if I put my best self forward."
+    }
+]
