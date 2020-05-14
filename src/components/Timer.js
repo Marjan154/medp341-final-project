@@ -3,8 +3,8 @@ import "../App.css";
 
 export default class Timer extends Component {
   state = {
-    minutes: this.props.minutes || 3,
-    seconds: this.props.seconds || 0,
+    minutes: this.props.minutes || 0,
+    seconds: this.props.seconds || 30,
   };
 
   componentDidMount() {
@@ -35,7 +35,7 @@ export default class Timer extends Component {
 
   render() {
     const { minutes, seconds } = this.state;
-    const fontSize = minutes > 0 ? 100 / minutes : 160 - seconds;
+    const fontSize = minutes > 0 ? 120 / minutes : 160 - seconds;
 
     const color = minutes <= 1 ? "red" : "black";
     return (
@@ -56,7 +56,7 @@ export default class Timer extends Component {
             </h1>
           ) : (
             <h1
-              class={minutes === 0 ? "wiggleSlow" : ""}
+              class={minutes === 1 ? "wiggleSlow" : ""}
               style={{ fontSize, color }}
             >
               {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
