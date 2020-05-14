@@ -20,6 +20,7 @@ class App extends Component {
         display: "inline-block",
         margin: "2px",
       },
+      wordsAndStyles: [],
     };
     this.styles = {
       progressBars: {
@@ -35,21 +36,41 @@ class App extends Component {
     };
   }
   componentDidMount = () => {
-    const introWords = introText.split(" ").map((word) => word);
-    this.setState({ introWords });
+    const wordsAndStyles = introText.split(" ").map((word, i) => {
+      const style = {
+        display: "inline-block",
+        margin: "3px",
+      };
+      return { index: i, word, style, rotateBy: 0, marginBy: 2 };
+    });
+    this.setState({ wordsAndStyles });
+  };
+  generateRandomStyle = (wordsObject) => {
+    const { rotateBy, marginBy } = wordsObject;
+    const margin = Math.floor(Math.random() + 10 - 5);
+    const colors = ["red", "black", "black", "black"];
+    const fontWeights = [100, 400, 700];
+    const rotation = Math.floor(Math.random() * 41 - 20);
+    return {
+      display: "inline-block",
+      transform: `rotate(${rotateBy + rotation}deg)`,
+      margin: `${marginBy + margin}px`,
+      fontWeight: fontWeights[Math.floor(Math.random() * fontWeights.length)],
+      color: colors[Math.floor(Math.random() * colors.length)],
+    };
   };
   breakParagraph = () => {
-    const { rotateBy, marginBy } = this.state;
-    const introWordStyle = {
-      display: "inline-block",
-      transform: `rotate(${rotateBy + 2}deg)`,
-      margin: `${marginBy + 0.2}px`,
-    };
-    this.setState({
-      introWordStyle,
-      rotateBy: rotateBy + 2,
-      marginBy: marginBy + 0.2,
-    });
+    const { wordsAndStyles } = this.state;
+    const arr = wordsAndStyles;
+    for (let i = 0; i < 5; i++) {
+      const selected = Math.floor(Math.random() * wordsAndStyles.length);
+      const replaceIndex = wordsAndStyles[selected].index;
+      const newStyles = this.generateRandomStyle(wordsAndStyles[selected]);
+      console.log(newStyles);
+      console.log(arr[replaceIndex]);
+      arr[replaceIndex].style = newStyles;
+    }
+    this.setState({ wordsAndStyles: arr });
   };
 
   handleAnswer = (type) => {
@@ -108,16 +129,24 @@ class App extends Component {
       </div>
     );
   };
+
+  generateParagraph = () => {
+    const { wordsAndStyles } = this.state;
+
+    const paragraph = wordsAndStyles.map((word, i) => (
+      <span id={`word-${i}`} style={word.style}>
+        {word.word + " "}
+      </span>
+    ));
+    return paragraph;
+  };
   render() {
     const { questionNumber, productivityLevel, anxietyLevel } = this.state;
     const progressColor = (level) => {
       return level > 65 ? "success" : level < 30 ? "danger" : "warning";
     };
-    const paragraph = this.state.introWords.map((word, i) => (
-      <span id={`word-${i}`} style={this.state.introWordStyle}>
-        {word + " "}
-      </span>
-    ));
+    const paragraph =
+      this.state.wordsAndStyles.length && this.generateParagraph();
     return (
       <div className="App">
         <div style={this.styles.mybody}>
