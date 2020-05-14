@@ -3,6 +3,7 @@ import "./App.css";
 import questions from "./situations.json";
 import { Button, ProgressBar } from "react-bootstrap";
 import introText from "./intro.js";
+import Timer from "./components/Timer";
 
 //Dont forget API call
 class App extends Component {
@@ -31,10 +32,13 @@ class App extends Component {
     };
     this.styles = {
       progressBars: {
-        width: "60%",
+        width: "75%",
         textAlign: "left",
-        alignSelf: "center",
+        // alignSelf: "right",
         margin: "50px auto",
+        // display: "inline-block",
+        float: "right",
+        marginLeft: "5vw",
       },
       mybody: {
         margin: "3% 7%",
@@ -213,6 +217,17 @@ class App extends Component {
             <br />
             <label>Ability to perform future tasks:</label>
             <ProgressBar animated now={100} variant="info" label={`100%`} />
+          </div>
+          <div
+            style={{
+              textAlign: "left",
+              position: "absolute",
+              bottom: 20,
+              left: 20,
+              width: "20%",
+            }}
+          >
+            <Timer />
           </div>
         </div>
       </div>

@@ -36,3 +36,31 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  80% {
+    transform: rotate(0deg);
+  }
+  85% {
+    transform: rotate(20deg);
+  }
+  95% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.wiggle {
+  display: inline-block;
+  animation: wiggle 0.5s infinite;
+}
+
+.wiggleSlow {
+  display: inline-block;
+  animation: wiggle 2.5s infinite;
+}
