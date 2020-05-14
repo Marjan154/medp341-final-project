@@ -48,9 +48,9 @@ class App extends Component {
   generateRandomStyle = (wordsObject) => {
     const { rotateBy, marginBy } = wordsObject;
     const margin = Math.floor(Math.random() + 10 - 5);
-    const colors = ["red", "black", "black", "black"];
+    const colors = ["red", "black", "black", "black", "#fcba03", "#4a0417"];
     const fontWeights = [100, 400, 700];
-    const rotation = Math.floor(Math.random() * 41 - 20);
+    const rotation = Math.floor(Math.random() * 101 - 50);
     return {
       display: "inline-block",
       transform: `rotate(${rotateBy + rotation}deg)`,
@@ -81,6 +81,7 @@ class App extends Component {
         productivityLevel: productivityLevel <= 10 ? 0 : productivityLevel - 10,
         anxietyLevel: anxietyLevel >= 100 ? 100 : anxietyLevel + 10,
       });
+      this.breakParagraph();
     } else {
       this.setState({
         anxietyLevel: anxietyLevel <= 10 ? 0 : anxietyLevel - 10,
@@ -156,7 +157,6 @@ class App extends Component {
 
           <br />
           <br />
-          <button onClick={this.breakParagraph}>Break text</button>
           <div>{this.displayQuestion(questions[questionNumber])}</div>
           <div style={this.styles.progressBars}>
             <label>Productivity:</label>
