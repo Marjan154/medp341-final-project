@@ -21,6 +21,13 @@ class App extends Component {
         margin: "2px",
       },
       wordsAndStyles: [],
+      goodWords: ["good", "healthy"],
+      antonyms: {
+        good: "bad",
+        healthy: "unhealthy",
+        // bad: "good",
+        // unhealthy: "healthy",
+      },
     };
     this.styles = {
       progressBars: {
@@ -35,13 +42,21 @@ class App extends Component {
       },
     };
   }
+  // goodWords = ["good", "healthy"];
+  // // badWord = ["bad", "unhealthy"];
+  // antonyms = {
+  //   good: "bad",
+  //   healthy: "unhealthy",
+  //   // bad: "good",
+  //   // unhealthy: "healthy",
+  // };
   componentDidMount = () => {
     const wordsAndStyles = introText.split(" ").map((word, i) => {
       const style = {
         display: "inline-block",
         margin: "3px",
       };
-      return { index: i, word, style, rotateBy: 0, marginBy: 2 };
+      return { index: i, word, display: word, style, rotateBy: 0, marginBy: 2 };
     });
     this.setState({ wordsAndStyles });
   };
@@ -72,11 +87,31 @@ class App extends Component {
             display: "inline-block",
             margin: "3px",
           };
-      console.log(newStyles);
-      console.log(arr[replaceIndex]);
       arr[replaceIndex].style = newStyles;
+      if (!breakP) {
+        if (arr[replaceIndex].word !== arr[replaceIndex].display) {
+          arr[replaceIndex].display = arr[replaceIndex].word;
+        }
+      } else {
+        if (this.state.goodWords.includes(arr[replaceIndex].word)) {
+          arr[replaceIndex].display = this.state.antonyms[
+            arr[replaceIndex].word
+          ];
+        }
+      }
     }
     this.setState({ wordsAndStyles: arr });
+  };
+
+  generateParagraph = () => {
+    const { wordsAndStyles } = this.state;
+
+    const paragraph = wordsAndStyles.map((word, i) => (
+      <span id={`word-${i}`} style={word.style}>
+        {word.display + " "}
+      </span>
+    ));
+    return paragraph;
   };
 
   handleAnswer = (type) => {
@@ -138,16 +173,6 @@ class App extends Component {
     );
   };
 
-  generateParagraph = () => {
-    const { wordsAndStyles } = this.state;
-
-    const paragraph = wordsAndStyles.map((word, i) => (
-      <span id={`word-${i}`} style={word.style}>
-        {word.word + " "}
-      </span>
-    ));
-    return paragraph;
-  };
   render() {
     const { questionNumber, productivityLevel, anxietyLevel } = this.state;
     const progressColor = (level) => {
