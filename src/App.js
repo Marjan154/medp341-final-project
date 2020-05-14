@@ -49,14 +49,13 @@ class App extends Component {
       progressBars: {
         width: "75%",
         textAlign: "left",
-        // alignSelf: "right",
+
         margin: "50px auto",
-        // display: "inline-block",
         float: "right",
         marginLeft: "5vw",
       },
       mybody: {
-        margin: "3% 7%",
+        margin: "1% 7%",
         textAlign: "center",
       },
     };
@@ -219,7 +218,6 @@ class App extends Component {
               label={`${productivityLevel}%`}
             />
             <br />
-            <br />
             <label>Anxiety:</label>
             <ProgressBar
               animated
@@ -227,8 +225,6 @@ class App extends Component {
               variant={progressColor(100 - anxietyLevel)}
               label={`${anxietyLevel}%`}
             />
-            <br />
-            <br />
             <br />
             <label>Ability to perform future tasks:</label>
             <ProgressBar animated now={100} variant="info" label={`100%`} />
