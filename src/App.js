@@ -83,7 +83,7 @@ class App extends Component {
     const margin = Math.floor(Math.random() + 10 - 5);
     const colors = ["red", "black", "black", "black", "#fcba03", "#4a0417"];
     const fontWeights = [100, 400, 700];
-    const rotation = Math.floor(Math.random() * 101 - 50);
+    const rotation = Math.floor(Math.random() * 201 - 100);
     return {
       display: "inline-block",
       transform: `rotate(${rotateBy + rotation}deg)`,
@@ -99,24 +99,30 @@ class App extends Component {
     for (let i = 0; i < times; i++) {
       const selected = Math.floor(Math.random() * wordsAndStyles.length);
       const replaceIndex = wordsAndStyles[selected].index;
-      const newStyles = breakP
-        ? this.generateRandomStyle(wordsAndStyles[selected])
-        : {
-            display: "inline-block",
-            margin: "3px",
-          };
-      arr[replaceIndex].style = newStyles;
-      if (!breakP) {
-        if (arr[replaceIndex].word !== arr[replaceIndex].display) {
-          arr[replaceIndex].display = arr[replaceIndex].word;
-        }
-      } else {
+      let newStyles = {
+        display: "inline-block",
+        margin: "3px",
+      };
+      if (breakP) {
+        newStyles = this.generateRandomStyle(wordsAndStyles[selected]);
         if (this.state.goodWords.includes(arr[replaceIndex].word)) {
           arr[replaceIndex].display = this.state.antonyms[
             arr[replaceIndex].word
           ];
         }
+      } else {
+        if (arr[replaceIndex].word !== arr[replaceIndex].display) {
+          arr[replaceIndex].display = arr[replaceIndex].word;
+        }
+        if (this.state.goodWords.includes(arr[replaceIndex].display)) {
+          newStyles = {
+            display: "inline-block",
+            margin: "3px",
+            color: "green",
+          };
+        }
       }
+      arr[replaceIndex].style = newStyles;
     }
     this.setState({ wordsAndStyles: arr });
   };
