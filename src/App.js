@@ -59,13 +59,19 @@ class App extends Component {
       color: colors[Math.floor(Math.random() * colors.length)],
     };
   };
-  breakParagraph = () => {
+  breakParagraph = (breakP) => {
     const { wordsAndStyles } = this.state;
     const arr = wordsAndStyles;
-    for (let i = 0; i < 5; i++) {
+    const times = breakP ? 5 : 15;
+    for (let i = 0; i < times; i++) {
       const selected = Math.floor(Math.random() * wordsAndStyles.length);
       const replaceIndex = wordsAndStyles[selected].index;
-      const newStyles = this.generateRandomStyle(wordsAndStyles[selected]);
+      const newStyles = breakP
+        ? this.generateRandomStyle(wordsAndStyles[selected])
+        : {
+            display: "inline-block",
+            margin: "3px",
+          };
       console.log(newStyles);
       console.log(arr[replaceIndex]);
       arr[replaceIndex].style = newStyles;
@@ -81,13 +87,14 @@ class App extends Component {
         productivityLevel: productivityLevel <= 10 ? 0 : productivityLevel - 10,
         anxietyLevel: anxietyLevel >= 100 ? 100 : anxietyLevel + 10,
       });
-      this.breakParagraph();
+      this.breakParagraph(true);
     } else {
       this.setState({
         anxietyLevel: anxietyLevel <= 10 ? 0 : anxietyLevel - 10,
         productivityLevel:
           productivityLevel >= 100 ? 100 : productivityLevel + 10,
       });
+      this.breakParagraph(false);
     }
     this.setState({
       questionNumber:
