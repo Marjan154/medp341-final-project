@@ -158,6 +158,17 @@ class App extends Component {
         questionNumber >= questions.length - 1 ? 0 : questionNumber + 1,
     });
   };
+  displayTimeMessage = (message, color) => {
+    let timeMessage = document.createElement("div");
+    timeMessage.textContent = message;
+    timeMessage.className = "timeMessage";
+    timeMessage.style.color = color;
+    document.body.appendChild(timeMessage);
+    setTimeout(() => {
+      let elements = document.getElementsByClassName("timeMessage");
+      elements[0].parentNode.removeChild(elements[0]);
+    }, 5000);
+  };
   displayQuestion = (question) => {
     const { situation, optionBad, optionGood } = question;
     return (
@@ -168,6 +179,7 @@ class App extends Component {
           size="lg"
           onClick={() => {
             this.handleAnswer("bad");
+            this.displayTimeMessage("-10", "red");
             this.loseTime(10);
           }}
           style={{
@@ -185,7 +197,8 @@ class App extends Component {
           size="lg"
           onClick={() => {
             this.handleAnswer("good");
-            this.addTime(30);
+            this.displayTimeMessage("+20", "green");
+            this.addTime(20);
           }}
           style={{
             backgroundColor: "#1aabab",
@@ -202,13 +215,7 @@ class App extends Component {
   };
 
   render() {
-    const {
-      questionNumber,
-      productivityLevel,
-      anxietyLevel,
-      minutes,
-      seconds,
-    } = this.state;
+    const { questionNumber, productivityLevel, anxietyLevel } = this.state;
     const progressColor = (level) => {
       return level > 65 ? "success" : level < 30 ? "danger" : "warning";
     };
