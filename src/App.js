@@ -206,8 +206,8 @@ class App extends Component {
           size="lg"
           onClick={() => {
             this.handleAnswer("bad");
-            this.displayTimeMessage("-10", "red");
-            this.loseTime(10);
+            this.displayTimeMessage("-20", "red");
+            this.loseTime(20);
           }}
           style={{
             backgroundColor: "#1aabab",
@@ -224,8 +224,8 @@ class App extends Component {
           size="lg"
           onClick={() => {
             this.handleAnswer("good");
-            this.displayTimeMessage("+20", "green");
-            this.addTime(20);
+            this.displayTimeMessage("+5", "green");
+            this.addTime(5);
           }}
           style={{
             backgroundColor: "#1aabab",
@@ -249,7 +249,6 @@ class App extends Component {
       productivityCount,
       unproductiveCount,
     } = this.state;
-    // change iitial ratio
     const plevel =
       productivityCount + unproductiveCount <= 5
         ? 100 - unproductiveCount * 20
@@ -262,10 +261,9 @@ class App extends Component {
         : Math.round(
             (unproductiveCount / (productivityCount + unproductiveCount)) * 100
           );
-    console.log("productivity", productivityCount, " level", plevel);
-    console.log("unproductivity", unproductiveCount, " level", ulevel);
+
     const progressColor = (level) => {
-      return level > 65 ? "success" : level < 30 ? "danger" : "warning";
+      return level > 60 ? "success" : level < 40 ? "danger" : "warning";
     };
     const paragraph =
       this.state.wordsAndStyles.length && this.generateParagraph();
