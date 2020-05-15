@@ -13,37 +13,13 @@ class App extends Component {
       questionNumber: 0,
       productivityLevel: 100,
       anxietyLevel: 0,
-      intro: "",
-      introWords: [],
-      rotateBy: 2,
-      marginBy: 1,
       introWordStyle: {
         display: "inline-block",
         margin: "2px",
       },
+      minutes: 3,
+      seconds: 30,
       wordsAndStyles: [],
-      goodWords: [
-        "good",
-        "healthy",
-        "well",
-        "satisfactory",
-        "progress",
-        "managable",
-        "balanced",
-        "organized",
-        "together",
-      ],
-      antonyms: {
-        good: "bad",
-        healthy: "unhealthy",
-        well: "not well",
-        satisfactory: "disatisfactory",
-        progress: "procrastination",
-        managable: "unmanagable",
-        balanced: "unbalanced",
-        organized: "disorganized",
-        together: "broken",
-      },
     };
     this.styles = {
       progressBars: {
@@ -58,6 +34,30 @@ class App extends Component {
         margin: "1% 7%",
         textAlign: "center",
       },
+    };
+    this.goodWords = [
+      "good",
+      "healthy",
+      "well",
+      "satisfactory",
+      "progress",
+      "managable",
+      "balanced",
+      "organized",
+      "together",
+      "responsible",
+    ];
+    this.antonyms = {
+      good: "bad",
+      healthy: "unhealthy",
+      well: "not well",
+      satisfactory: "disatisfactory",
+      progress: "procrastination",
+      managable: "unmanagable",
+      balanced: "unbalanced",
+      organized: "disorganized",
+      together: "broken",
+      responsible: "irresponsible",
     };
   }
   // goodWords = ["good", "healthy"];
@@ -105,16 +105,14 @@ class App extends Component {
       };
       if (breakP) {
         newStyles = this.generateRandomStyle(wordsAndStyles[selected]);
-        if (this.state.goodWords.includes(arr[replaceIndex].word)) {
-          arr[replaceIndex].display = this.state.antonyms[
-            arr[replaceIndex].word
-          ];
+        if (this.goodWords.includes(arr[replaceIndex].word)) {
+          arr[replaceIndex].display = this.antonyms[arr[replaceIndex].word];
         }
       } else {
         if (arr[replaceIndex].word !== arr[replaceIndex].display) {
           arr[replaceIndex].display = arr[replaceIndex].word;
         }
-        if (this.state.goodWords.includes(arr[replaceIndex].display)) {
+        if (this.goodWords.includes(arr[replaceIndex].display)) {
           newStyles = {
             display: "inline-block",
             margin: "3px",
@@ -168,7 +166,10 @@ class App extends Component {
         <Button
           variant="secondary"
           size="lg"
-          onClick={() => this.handleAnswer("bad")}
+          onClick={() => {
+            this.handleAnswer("bad");
+            this.loseTime(10);
+          }}
           style={{
             backgroundColor: "#1aabab",
             margin: "5px",
@@ -182,7 +183,10 @@ class App extends Component {
         <Button
           variant="secondary"
           size="lg"
-          onClick={() => this.handleAnswer("good")}
+          onClick={() => {
+            this.handleAnswer("good");
+            this.addTime(30);
+          }}
           style={{
             backgroundColor: "#1aabab",
             margin: "5px",
@@ -198,7 +202,13 @@ class App extends Component {
   };
 
   render() {
-    const { questionNumber, productivityLevel, anxietyLevel } = this.state;
+    const {
+      questionNumber,
+      productivityLevel,
+      anxietyLevel,
+      minutes,
+      seconds,
+    } = this.state;
     const progressColor = (level) => {
       return level > 65 ? "success" : level < 30 ? "danger" : "warning";
     };
@@ -244,7 +254,10 @@ class App extends Component {
               width: "20%",
             }}
           >
-            <Timer />
+            <Timer
+              addTime={(add) => (this.addTime = add)}
+              loseTime={(lost) => (this.loseTime = lost)}
+            />
           </div>
         </div>
       </div>
