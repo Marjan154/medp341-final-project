@@ -14,7 +14,10 @@ class App extends Component {
       productivityLevel: 100,
       anxietyLevel: 0,
       wordsAndStyles: [],
+      productivityCount: 0,
+      unproductiveCount: 0,
     };
+    // 4:5 ratio
     this.goodWords = [
       "good",
       "healthy",
@@ -139,15 +142,23 @@ class App extends Component {
   // Handles answer selection. Updates progress bars and
   // breaks or fixes paragraph based on choice
   handleAnswer = (type) => {
-    const { questionNumber, productivityLevel, anxietyLevel } = this.state;
+    const {
+      questionNumber,
+      productivityLevel,
+      anxietyLevel,
+      productivityCount,
+      unproductiveCount,
+    } = this.state;
     if (type === "bad") {
       this.setState({
+        unproductiveCount: unproductiveCount + 1,
         productivityLevel: productivityLevel <= 10 ? 0 : productivityLevel - 10,
         anxietyLevel: anxietyLevel >= 100 ? 100 : anxietyLevel + 10,
       });
       this.breakParagraph(true);
     } else {
       this.setState({
+        productivityCount: productivityCount + 1,
         anxietyLevel: anxietyLevel <= 10 ? 0 : anxietyLevel - 10,
         productivityLevel:
           productivityLevel >= 100 ? 100 : productivityLevel + 10,
@@ -188,7 +199,8 @@ class App extends Component {
     const { situation, optionBad, optionGood } = question;
     return (
       <div>
-        <h3>{situation}</h3>
+        <h2>{situation}</h2>
+        <br />
         <Button
           variant="secondary"
           size="lg"
@@ -230,7 +242,27 @@ class App extends Component {
   };
 
   render() {
-    const { questionNumber, productivityLevel, anxietyLevel } = this.state;
+    const {
+      questionNumber,
+      productivityLevel,
+      anxietyLevel,
+      productivityCount,
+      unproductiveCount,
+    } = this.state;
+    const plevel =
+      productivityCount + unproductiveCount === 0
+        ? 100
+        : Math.round(
+            (productivityCount / (productivityCount + unproductiveCount)) * 100
+          );
+    const ulevel =
+      productivityCount + unproductiveCount === 0
+        ? 0
+        : Math.round(
+            (unproductiveCount / (productivityCount + unproductiveCount)) * 100
+          );
+    console.log("productivity", productivityCount, " level", plevel);
+    console.log("unproductivity", unproductiveCount, " level", ulevel);
     const progressColor = (level) => {
       return level > 65 ? "success" : level < 30 ? "danger" : "warning";
     };
@@ -251,17 +283,17 @@ class App extends Component {
             <br />
             <ProgressBar
               animated
-              now={productivityLevel}
-              variant={progressColor(productivityLevel)}
-              label={`${productivityLevel}%`}
+              now={plevel}
+              variant={progressColor(plevel)}
+              label={`${plevel}%`}
             />
             <br />
             <label>Anxiety:</label>
             <ProgressBar
               animated
-              now={anxietyLevel}
-              variant={progressColor(100 - anxietyLevel)}
-              label={`${anxietyLevel}%`}
+              now={ulevel}
+              variant={progressColor(100 - ulevel)}
+              label={`${ulevel}%`}
             />
             <br />
             <label>Ability to perform future tasks:</label>
