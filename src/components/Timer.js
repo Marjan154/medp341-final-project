@@ -60,7 +60,7 @@ export default class Timer extends Component {
   render() {
     const { minutes, seconds } = this.state;
     const fontSize =
-      minutes > 0 ? (120 / minutes < 40 ? 40 : 120 / minutes) : 160 - seconds;
+      minutes > 0 ? (120 / minutes < 40 ? 40 : 120 / minutes) : 180 - seconds;
 
     const color = minutes <= 1 ? "red" : "black";
     return (
