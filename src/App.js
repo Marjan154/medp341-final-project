@@ -164,10 +164,11 @@ class App extends Component {
     timeMessage.className = "timeMessage";
     timeMessage.style.color = color;
     document.body.appendChild(timeMessage);
-    setTimeout(() => {
+    let myInterval = setTimeout(() => {
       let elements = document.getElementsByClassName("timeMessage");
       elements[0].parentNode.removeChild(elements[0]);
-    }, 5000);
+    }, 1000);
+    clearInterval(myInterval);
   };
   displayQuestion = (question) => {
     const { situation, optionBad, optionGood } = question;
