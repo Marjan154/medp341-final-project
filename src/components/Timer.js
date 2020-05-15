@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "../App.css";
 
+// Used https://medium.com/better-programming/building-a-simple-countdown-timer-with-react-4ca32763dda7
+// as base code, and changed functionality
 export default class Timer extends Component {
   state = {
     minutes: this.props.minutes || 3,
@@ -8,8 +10,11 @@ export default class Timer extends Component {
   };
 
   componentDidMount() {
+    // Send addTime and losetime functions to parent App
     this.props.addTime(this.addTime);
     this.props.loseTime(this.loseTime);
+
+    // Handles minute and seconds change
     this.myInterval = setInterval(() => {
       const { seconds, minutes } = this.state;
       if (seconds > 0) {
@@ -34,12 +39,14 @@ export default class Timer extends Component {
     clearInterval(this.myInterval);
   }
 
+  //Adds time on to timeer
   addTime = (moreTime) => {
     let currTime = this.convertTimetoSecs(this.state);
     let newTime = this.convertSecsToTime(currTime + moreTime);
     this.setState({ seconds: newTime.seconds, minutes: newTime.minutes });
   };
 
+  // Removes time from timer
   loseTime = (lost) => {
     let currTime = this.convertTimetoSecs(this.state);
     let newTime = this.convertSecsToTime(
@@ -47,6 +54,8 @@ export default class Timer extends Component {
     );
     this.setState({ seconds: newTime.seconds, minutes: newTime.minutes });
   };
+
+  // Time conversion helpers
   convertSecsToTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time - minutes * 60;
@@ -59,6 +68,8 @@ export default class Timer extends Component {
 
   render() {
     const { minutes, seconds } = this.state;
+
+    // Annoying hack to inversely increase fontisize with decreasing time
     const fontSize =
       minutes > 0 ? (120 / minutes < 40 ? 40 : 120 / minutes) : 180 - seconds;
 

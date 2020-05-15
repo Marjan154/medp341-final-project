@@ -13,27 +13,7 @@ class App extends Component {
       questionNumber: 0,
       productivityLevel: 100,
       anxietyLevel: 0,
-      introWordStyle: {
-        display: "inline-block",
-        margin: "2px",
-      },
-      minutes: 3,
-      seconds: 30,
       wordsAndStyles: [],
-    };
-    this.styles = {
-      progressBars: {
-        width: "75%",
-        textAlign: "left",
-
-        margin: "50px auto",
-        float: "right",
-        marginLeft: "5vw",
-      },
-      mybody: {
-        margin: "1% 7%",
-        textAlign: "center",
-      },
     };
     this.goodWords = [
       "good",
@@ -59,15 +39,22 @@ class App extends Component {
       together: "broken",
       responsible: "irresponsible",
     };
+    this.styles = {
+      progressBars: {
+        width: "75%",
+        textAlign: "left",
+        margin: "50px auto",
+        float: "right",
+        marginLeft: "5vw",
+      },
+      mybody: {
+        margin: "1% 7%",
+        textAlign: "center",
+      },
+    };
   }
-  // goodWords = ["good", "healthy"];
-  // // badWord = ["bad", "unhealthy"];
-  // antonyms = {
-  //   good: "bad",
-  //   healthy: "unhealthy",
-  //   // bad: "good",
-  //   // unhealthy: "healthy",
-  // };
+
+  // Convert intro paragraph text to individually styled spans
   componentDidMount = () => {
     const wordsAndStyles = introText.split(" ").map((word, i) => {
       const style = {
@@ -78,6 +65,8 @@ class App extends Component {
     });
     this.setState({ wordsAndStyles });
   };
+
+  // Returns random style for rotation, fontweight, margin and colors
   generateRandomStyle = (wordsObject) => {
     const { rotateBy, marginBy } = wordsObject;
     const margin = Math.floor(Math.random() + 10 - 5);
@@ -92,17 +81,27 @@ class App extends Component {
       color: colors[Math.floor(Math.random() * colors.length)],
     };
   };
+
+  /**
+   * @param {boolean} breakP true to break paragraph, false to fix paragraph
+   * This function randomly selects words in pargraph and styles
+   * good words and randomly styles bad ones. Converts word words to bad
+   * if breaking paragraph, and bad words back to big if fixing paragraph
+   */
   breakParagraph = (breakP) => {
     const { wordsAndStyles } = this.state;
     const arr = wordsAndStyles;
-    const times = breakP ? 5 : 15;
+    const times = breakP ? 5 : 15; // change more good words than bad
     for (let i = 0; i < times; i++) {
+      // pick random word to style
       const selected = Math.floor(Math.random() * wordsAndStyles.length);
       const replaceIndex = wordsAndStyles[selected].index;
       let newStyles = {
         display: "inline-block",
         margin: "3px",
       };
+      // If breaking paragraph, give random style to word and
+      // replace word if it is a good word. otherwise reset styles and fix word.
       if (breakP) {
         newStyles = this.generateRandomStyle(wordsAndStyles[selected]);
         if (this.goodWords.includes(arr[replaceIndex].word)) {
@@ -125,6 +124,7 @@ class App extends Component {
     this.setState({ wordsAndStyles: arr });
   };
 
+  // Take words and style objects and displays them as a paragraph
   generateParagraph = () => {
     const { wordsAndStyles } = this.state;
 
@@ -136,8 +136,9 @@ class App extends Component {
     return paragraph;
   };
 
+  // Handles answer selection. Updates progress bars and
+  // breaks or fixes paragraph based on choice
   handleAnswer = (type) => {
-    //handle progress bar or other animations
     const { questionNumber, productivityLevel, anxietyLevel } = this.state;
     if (type === "bad") {
       this.setState({
@@ -158,6 +159,8 @@ class App extends Component {
         questionNumber >= questions.length - 1 ? 0 : questionNumber + 1,
     });
   };
+
+  // Create and show animated time message, and then remove the element
   displayTimeMessage = (message, color) => {
     let timeMessage = document.createElement("div");
     timeMessage.textContent = message;
@@ -170,6 +173,17 @@ class App extends Component {
     }, 1000);
     clearInterval(myInterval);
   };
+
+  replay = () => {
+    this.setState({
+      minutes: 30,
+      seconds: 30,
+      done: false,
+      productivityLevel: 100,
+      anxietyLevel: 0,
+    });
+  };
+  // Sets up questions display. Handles answer and adjusts time
   displayQuestion = (question) => {
     const { situation, optionBad, optionGood } = question;
     return (
