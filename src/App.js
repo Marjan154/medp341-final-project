@@ -249,15 +249,16 @@ class App extends Component {
       productivityCount,
       unproductiveCount,
     } = this.state;
+    // change iitial ratio
     const plevel =
-      productivityCount + unproductiveCount === 0
-        ? 100
+      productivityCount + unproductiveCount <= 5
+        ? 100 - unproductiveCount * 20
         : Math.round(
             (productivityCount / (productivityCount + unproductiveCount)) * 100
           );
     const ulevel =
-      productivityCount + unproductiveCount === 0
-        ? 0
+      productivityCount + unproductiveCount <= 5
+        ? unproductiveCount * 20
         : Math.round(
             (unproductiveCount / (productivityCount + unproductiveCount)) * 100
           );
