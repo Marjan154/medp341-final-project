@@ -94,7 +94,7 @@ export default class Timer extends Component {
             <h1
               class="wiggle"
               style={{
-                fontSize: 120,
+                fontSize: 150,
                 color: "red",
                 width: "inherit",
                 textAlign: "center",
