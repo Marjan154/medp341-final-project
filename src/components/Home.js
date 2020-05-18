@@ -4,6 +4,7 @@ import questions from "../situations.json";
 import { Button, ProgressBar } from "react-bootstrap";
 import introText from "../intro.js";
 import Timer from "./Timer";
+import Confetti from "react-confetti";
 
 //Dont forget API call
 class Home extends Component {
@@ -151,6 +152,8 @@ class Home extends Component {
             display: "inline-block",
             margin: "3px",
             color: "green",
+            fontSize: "18px",
+            textShadow: "0 0 5px green",
           };
         }
       }
@@ -196,46 +199,6 @@ class Home extends Component {
   displayQuestion = (question) => {
     const { situation, optionBad, optionGood } = question;
     const { minutes, seconds, questionNumber } = this.state;
-    const buttons = [
-      <Button
-        variant="secondary"
-        size="lg"
-        onClick={() => {
-          this.handleAnswer("bad");
-          this.displayTimeMessage("-20", "red");
-          this.loseTime(10);
-        }}
-        style={{
-          backgroundColor: "#1aabab",
-          margin: "5px",
-          width: "25%",
-          height: "70px",
-          fontSize: "1vw",
-        }}
-      >
-        {optionBad}
-      </Button>,
-      <Button
-        variant="secondary"
-        size="lg"
-        onClick={() => {
-          this.handleAnswer("good");
-          this.displayTimeMessage("+5", "green");
-          this.addTime(5);
-        }}
-        style={{
-          backgroundColor: "#1aabab",
-          margin: "5px",
-          width: "25%",
-          height: "70px",
-          fontSize: "1vw",
-        }}
-      >
-        {optionGood}
-      </Button>,
-    ];
-    const button1 = questionNumber % 2 === 0 ? buttons[0] : buttons[1];
-    const button2 = questionNumber % 2 === 0 ? buttons[1] : buttons[0];
     // if times up, display play again
     if (minutes === 0 && seconds === 0) {
       return (
@@ -247,16 +210,55 @@ class Home extends Component {
             style={{
               backgroundColor: "#1aabab",
               margin: "5px",
-              width: "25%",
-              height: "70px",
+              height: "50px",
               fontSize: "1vw",
             }}
           >
-            You are out of time! Play Again
+            Play Again
           </Button>
         </div>
       );
     } else {
+      const buttons = [
+        <Button
+          variant="secondary"
+          size="lg"
+          onClick={() => {
+            this.handleAnswer("bad");
+            this.displayTimeMessage("-20", "red");
+            this.loseTime(10);
+          }}
+          style={{
+            backgroundColor: "#1aabab",
+            margin: "5px",
+            width: "25%",
+            height: "70px",
+            fontSize: "1vw",
+          }}
+        >
+          {optionBad}
+        </Button>,
+        <Button
+          variant="secondary"
+          size="lg"
+          onClick={() => {
+            this.handleAnswer("good");
+            this.displayTimeMessage("+5", "green");
+            this.addTime(5);
+          }}
+          style={{
+            backgroundColor: "#1aabab",
+            margin: "5px",
+            width: "25%",
+            height: "70px",
+            fontSize: "1vw",
+          }}
+        >
+          {optionGood}
+        </Button>,
+      ];
+      const button1 = questionNumber % 2 === 0 ? buttons[0] : buttons[1];
+      const button2 = questionNumber % 2 === 0 ? buttons[1] : buttons[0];
       return (
         <div>
           <h2 style={{ color: "#1d365e", fontWeight: 600 }}>{situation}</h2>
@@ -302,7 +304,13 @@ class Home extends Component {
   };
 
   render() {
-    const { questionNumber, productivityCount, unproductiveCount } = this.state;
+    const {
+      questionNumber,
+      productivityCount,
+      unproductiveCount,
+      minutes,
+      seconds,
+    } = this.state;
 
     // calculate productivity/anxiety ratio levels
     const plevel =
@@ -318,18 +326,50 @@ class Home extends Component {
             (unproductiveCount / (productivityCount + unproductiveCount)) * 100
           );
 
+    const wasProductive =
+      productivityCount > 0 &&
+      Math.round(
+        (productivityCount / (productivityCount + unproductiveCount)) * 100
+      ) >= 60
+        ? true
+        : false;
     // calculate progress bar color
     const progressColor = (level) => {
-      return level > 60 ? "success" : level < 40 ? "danger" : "warning";
+      return level >= 60 ? "success" : level < 40 ? "danger" : "warning";
     };
 
+    const timesUp = minutes === 0 && seconds === 0 ? true : false;
+    const showConfetti =
+      productivityCount + unproductiveCount >= 3 && plevel >= 60 ? true : false;
+
+    const confettiHeight =
+      timesUp && plevel >= 60 ? window.screen.height : window.screen.height / 4;
     // geenrate paragraph
     const paragraph =
       this.state.wordsAndStyles.length && this.generateParagraph();
 
+    const message = !timesUp ? (
+      <p style={{ color: "grey" }}>
+        Select your thoughts or decision for each prompt:
+      </p>
+    ) : wasProductive ? (
+      <p style={{ color: "Green", fontSize: "30px" }}>
+        Congratulations! You were productive today.
+      </p>
+    ) : (
+      <p style={{ color: "red" }}>Sorry, your time is up!</p>
+    );
+
     return (
       <div className="App">
         <div style={this.styles.mybody}>
+          {showConfetti && (
+            <Confetti
+              width={window.screen.width}
+              height={confettiHeight}
+              numberOfPieces={35}
+            />
+          )}
           <h1 className="title">Anxiety Simulation</h1>
           <br />
           <div className="introp" style={{ display: "block" }}>
@@ -338,9 +378,7 @@ class Home extends Component {
 
           <br />
 
-          <p style={{ color: "grey" }}>
-            Select your thoughts or decision for each prompt:
-          </p>
+          {message}
 
           <div>{this.displayQuestion(questions[questionNumber])}</div>
           <div style={this.styles.progressBars}>

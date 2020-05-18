@@ -6,7 +6,11 @@
 }
 
 .title {
+  color: #1aabab;
+  font-size: 60px;
   font-family: "Special Elite", cursive;
+  text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000,
+    0.5px 0.5px 0 #000;
 }
 .introp {
   font-family: "Comfortaa", cursive;
