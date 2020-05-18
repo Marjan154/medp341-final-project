@@ -11,8 +11,6 @@ class Home extends Component {
     super(props);
     this.state = {
       questionNumber: 0,
-      productivityLevel: 100,
-      anxietyLevel: 0,
       wordsAndStyles: [],
       productivityCount: 0,
       unproductiveCount: 0,
@@ -159,26 +157,15 @@ class Home extends Component {
   // Handles answer selection. Updates progress bars and
   // breaks or fixes paragraph based on choice
   handleAnswer = (type) => {
-    const {
-      questionNumber,
-      productivityLevel,
-      anxietyLevel,
-      productivityCount,
-      unproductiveCount,
-    } = this.state;
+    const { questionNumber, productivityCount, unproductiveCount } = this.state;
     if (type === "bad") {
       this.setState({
         unproductiveCount: unproductiveCount + 1,
-        productivityLevel: productivityLevel <= 10 ? 0 : productivityLevel - 10,
-        anxietyLevel: anxietyLevel >= 100 ? 100 : anxietyLevel + 10,
       });
       this.breakParagraph(true);
     } else {
       this.setState({
         productivityCount: productivityCount + 1,
-        anxietyLevel: anxietyLevel <= 10 ? 0 : anxietyLevel - 10,
-        productivityLevel:
-          productivityLevel >= 100 ? 100 : productivityLevel + 10,
       });
       this.breakParagraph(false);
     }
@@ -218,8 +205,6 @@ class Home extends Component {
       minutes: 30,
       seconds: 30,
       done: false,
-      productivityLevel: 100,
-      anxietyLevel: 0,
       productivityCount: 0,
       unproductiveCount: 0,
     });
@@ -245,14 +230,14 @@ class Home extends Component {
               fontSize: "1vw",
             }}
           >
-            Play Again
+            You are out of time! Play Again
           </Button>
         </div>
       );
     } else {
       return (
         <div>
-          <h2>{situation}</h2>
+          <h2 style={{ color: "#1d365e", fontWeight: 600 }}>{situation}</h2>
           <br />
           <Button
             variant="secondary"
@@ -296,21 +281,15 @@ class Home extends Component {
   };
 
   render() {
-    const {
-      questionNumber,
-      productivityLevel,
-      anxietyLevel,
-      productivityCount,
-      unproductiveCount,
-    } = this.state;
+    const { questionNumber, productivityCount, unproductiveCount } = this.state;
     const plevel =
-      productivityCount + unproductiveCount <= 5
+      productivityCount + unproductiveCount <= 3
         ? 100 - unproductiveCount * 20
         : Math.round(
             (productivityCount / (productivityCount + unproductiveCount)) * 100
           );
     const ulevel =
-      productivityCount + unproductiveCount <= 5
+      productivityCount + unproductiveCount <= 3
         ? unproductiveCount * 20
         : Math.round(
             (unproductiveCount / (productivityCount + unproductiveCount)) * 100
@@ -332,6 +311,10 @@ class Home extends Component {
 
           <br />
           <br />
+          <p style={{ color: "grey" }}>
+            Select your thoughts or decision for each prompt:
+          </p>
+
           <div>{this.displayQuestion(questions[questionNumber])}</div>
           <div style={this.styles.progressBars}>
             <label>Productivity:</label>

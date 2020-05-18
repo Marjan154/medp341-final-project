@@ -33,5 +33,20 @@
     "situation": "You need to go to the gym",
     "optionBad": "Maybe some other time",
     "optionGood": "Working out is important for my health."
+  },
+  {
+    "situation": "You need to apply for your school",
+    "optionBad": "I'll never beat the competition",
+    "optionGood": "I have just as much as a chance as everyone else if I put my best self forward."
+  },
+  {
+    "situation": "You have an 8AM class",
+    "optionBad": "Im too tired, it's not worth it.",
+    "optionGood": "Class is important."
+  },
+  {
+    "situation": "You have chores to do",
+    "optionBad": "I'll just skip them",
+    "optionGood": "I have to be responsible"
   }
 ]
