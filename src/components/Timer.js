@@ -5,8 +5,8 @@ import "../App.css";
 // as base code, and changed functionality
 export default class Timer extends Component {
   state = {
-    minutes: this.props.minutes || 0,
-    seconds: this.props.seconds || 5,
+    minutes: this.props.minutes || 3,
+    seconds: this.props.seconds || 30,
   };
 
   componentDidMount() {
