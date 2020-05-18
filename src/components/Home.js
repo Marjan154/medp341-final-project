@@ -32,6 +32,8 @@ class Home extends Component {
       "organized",
       "together",
       "responsible",
+      "productive",
+      "successful",
     ];
     this.antonyms = {
       good: "bad",
@@ -44,6 +46,8 @@ class Home extends Component {
       organized: "disorganized",
       together: "broken",
       responsible: "irresponsible",
+      productive: "unproductive",
+      successful: "unsuccessful",
     };
     this.styles = {
       progressBars: {
@@ -76,7 +80,16 @@ class Home extends Component {
   generateRandomStyle = (wordsObject) => {
     const { rotateBy, marginBy } = wordsObject;
     const margin = Math.floor(Math.random() + 10 - 5);
-    const colors = ["red", "black", "black", "black", "#fcba03", "#4a0417"];
+    const colors = [
+      "red",
+      "black",
+      "black",
+      "#4a0417",
+      "black",
+      "#fcba03",
+      "#4a0417",
+      "red",
+    ];
     const fontWeights = [100, 400, 700];
     const rotation = Math.floor(Math.random() * 201 - 100);
     return {
@@ -247,7 +260,7 @@ class Home extends Component {
             onClick={() => {
               this.handleAnswer("bad");
               this.displayTimeMessage("-20", "red");
-              this.loseTime(20);
+              this.loseTime(10);
             }}
             style={{
               backgroundColor: "#1aabab",
