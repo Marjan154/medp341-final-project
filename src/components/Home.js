@@ -14,7 +14,6 @@ class Home extends Component {
       wordsAndStyles: [],
       productivityCount: 0,
       unproductiveCount: 0,
-      timesUp: false,
       minutes: 3,
       seconds: 30,
     };
@@ -31,6 +30,7 @@ class Home extends Component {
       "responsible",
       "productive",
       "successful",
+      "success",
     ];
     this.antonyms = {
       good: "bad",
@@ -45,12 +45,12 @@ class Home extends Component {
       responsible: "irresponsible",
       productive: "unproductive",
       successful: "unsuccessful",
+      success: "failure",
     };
     this.styles = {
       progressBars: {
         width: "75%",
         textAlign: "left",
-        margin: "50px auto",
         float: "right",
         marginLeft: "5vw",
       },
@@ -69,7 +69,15 @@ class Home extends Component {
         display: "inline-block",
         margin: "3px",
       };
-      return { index: i, word, display: word, style, rotateBy: 0, marginBy: 2 };
+      return {
+        index: i,
+        word,
+        display: word,
+        style,
+        rotateBy: 0,
+        marginBy: 2,
+        class: "",
+      };
     });
     this.setState({ wordsAndStyles });
   };
@@ -124,10 +132,19 @@ class Home extends Component {
         newStyles = this.generateRandomStyle(wordsAndStyles[selected]);
         if (this.goodWords.includes(arr[replaceIndex].word)) {
           arr[replaceIndex].display = this.antonyms[arr[replaceIndex].word];
+          arr[replaceIndex].class = "pulse";
+        } else {
+          arr[replaceIndex].class =
+            Math.random() > 0.5
+              ? Math.random() > 0.5
+                ? "spinClockwise"
+                : "spinCounterClockwise"
+              : "";
         }
       } else {
         if (arr[replaceIndex].word !== arr[replaceIndex].display) {
           arr[replaceIndex].display = arr[replaceIndex].word;
+          arr[replaceIndex].class = "";
         }
         if (this.goodWords.includes(arr[replaceIndex].display)) {
           newStyles = {
@@ -147,7 +164,7 @@ class Home extends Component {
     const { wordsAndStyles } = this.state;
 
     const paragraph = wordsAndStyles.map((word, i) => (
-      <span id={`word-${i}`} style={word.style}>
+      <span id={`word-${i}`} className={word.class} style={word.style}>
         {word.display + " "}
       </span>
     ));
@@ -203,7 +220,6 @@ class Home extends Component {
       return (
         <div>
           <h2 style={{ color: "#1d365e", fontWeight: 600 }}>{situation}</h2>
-          <br />
           <Button
             variant="secondary"
             size="lg"
@@ -314,7 +330,7 @@ class Home extends Component {
           </div>
 
           <br />
-          <br />
+
           <p style={{ color: "grey" }}>
             Select your thoughts or decision for each prompt:
           </p>
