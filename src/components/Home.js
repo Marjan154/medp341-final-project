@@ -135,7 +135,7 @@ class Home extends Component {
           arr[replaceIndex].class = "pulse";
         } else {
           arr[replaceIndex].class =
-            Math.random() > 0.5
+            Math.random() > 0.7
               ? Math.random() > 0.5
                 ? "spinClockwise"
                 : "spinCounterClockwise"
@@ -195,7 +195,47 @@ class Home extends Component {
   // Sets up questions display. Handles answer and adjusts time
   displayQuestion = (question) => {
     const { situation, optionBad, optionGood } = question;
-    const { minutes, seconds } = this.state;
+    const { minutes, seconds, questionNumber } = this.state;
+    const buttons = [
+      <Button
+        variant="secondary"
+        size="lg"
+        onClick={() => {
+          this.handleAnswer("bad");
+          this.displayTimeMessage("-20", "red");
+          this.loseTime(10);
+        }}
+        style={{
+          backgroundColor: "#1aabab",
+          margin: "5px",
+          width: "25%",
+          height: "70px",
+          fontSize: "1vw",
+        }}
+      >
+        {optionBad}
+      </Button>,
+      <Button
+        variant="secondary"
+        size="lg"
+        onClick={() => {
+          this.handleAnswer("good");
+          this.displayTimeMessage("+5", "green");
+          this.addTime(5);
+        }}
+        style={{
+          backgroundColor: "#1aabab",
+          margin: "5px",
+          width: "25%",
+          height: "70px",
+          fontSize: "1vw",
+        }}
+      >
+        {optionGood}
+      </Button>,
+    ];
+    const button1 = questionNumber % 2 === 0 ? buttons[0] : buttons[1];
+    const button2 = questionNumber % 2 === 0 ? buttons[1] : buttons[0];
     // if times up, display play again
     if (minutes === 0 && seconds === 0) {
       return (
@@ -220,42 +260,9 @@ class Home extends Component {
       return (
         <div>
           <h2 style={{ color: "#1d365e", fontWeight: 600 }}>{situation}</h2>
-          <Button
-            variant="secondary"
-            size="lg"
-            onClick={() => {
-              this.handleAnswer("bad");
-              this.displayTimeMessage("-20", "red");
-              this.loseTime(10);
-            }}
-            style={{
-              backgroundColor: "#1aabab",
-              margin: "5px",
-              width: "25%",
-              height: "70px",
-              fontSize: "1vw",
-            }}
-          >
-            {optionBad}
-          </Button>
-          <Button
-            variant="secondary"
-            size="lg"
-            onClick={() => {
-              this.handleAnswer("good");
-              this.displayTimeMessage("+5", "green");
-              this.addTime(5);
-            }}
-            style={{
-              backgroundColor: "#1aabab",
-              margin: "5px",
-              width: "25%",
-              height: "70px",
-              fontSize: "1vw",
-            }}
-          >
-            {optionGood}
-          </Button>
+
+          {button1}
+          {button2}
         </div>
       );
     }
@@ -323,7 +330,7 @@ class Home extends Component {
     return (
       <div className="App">
         <div style={this.styles.mybody}>
-          <h1 className="title">Performance Simulation</h1>
+          <h1 className="title">Anxiety Simulation</h1>
           <br />
           <div className="introp" style={{ display: "block" }}>
             {paragraph}
