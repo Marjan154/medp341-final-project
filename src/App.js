@@ -8,7 +8,6 @@ class App extends Component {
     return (
       <div className="App">
         <Router basename="/">
-          {/* <Navbar /> */}
           <Route exact path="/" component={Home} />
         </Router>
       </div>

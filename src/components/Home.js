@@ -18,7 +18,6 @@ class Home extends Component {
       minutes: 3,
       seconds: 30,
     };
-    // 4:5 ratio
     this.goodWords = [
       "good",
       "healthy",
@@ -64,6 +63,7 @@ class Home extends Component {
 
   // Convert intro paragraph text to individually styled spans
   componentDidMount = () => {
+    // would make word api call here
     const wordsAndStyles = introText.split(" ").map((word, i) => {
       const style = {
         display: "inline-block",
@@ -175,41 +175,6 @@ class Home extends Component {
     });
   };
 
-  // Create and show animated time message, and then remove the element
-  displayTimeMessage = (message, color) => {
-    let timeMessage = document.createElement("div");
-    timeMessage.textContent = message;
-    timeMessage.className = "timeMessage";
-    timeMessage.style.color = color;
-    document.body.appendChild(timeMessage);
-    let myInterval = setTimeout(() => {
-      let elements = document.getElementsByClassName("timeMessage");
-      elements[0].parentNode.removeChild(elements[0]);
-    }, 1000);
-    clearInterval(myInterval);
-  };
-
-  setTimesUp = () => {
-    this.setState({ timesUp: true });
-    console.log("SETTING TIME", this.state.timesUp);
-  };
-  setMinutes = (minutes) => {
-    this.setState({ minutes: minutes });
-  };
-  setSeconds = (seconds) => {
-    this.setState({ seconds: seconds });
-  };
-
-  replay = () => {
-    this.setState({
-      minutes: 30,
-      seconds: 30,
-      done: false,
-      productivityCount: 0,
-      unproductiveCount: 0,
-    });
-    this.resetTime();
-  };
   // Sets up questions display. Handles answer and adjusts time
   displayQuestion = (question) => {
     const { situation, optionBad, optionGood } = question;
@@ -280,8 +245,43 @@ class Home extends Component {
     }
   };
 
+  // Create and show animated time message, and then remove the element
+  displayTimeMessage = (message, color) => {
+    let timeMessage = document.createElement("div");
+    timeMessage.textContent = message;
+    timeMessage.className = "timeMessage";
+    timeMessage.style.color = color;
+    document.body.appendChild(timeMessage);
+    let myInterval = setTimeout(() => {
+      let elements = document.getElementsByClassName("timeMessage");
+      elements[0].parentNode.removeChild(elements[0]);
+    }, 1000);
+    clearInterval(myInterval);
+  };
+
+  setMinutes = (minutes) => {
+    this.setState({ minutes: minutes });
+  };
+  setSeconds = (seconds) => {
+    this.setState({ seconds: seconds });
+  };
+
+  replay = () => {
+    this.componentDidMount();
+    this.setState({
+      minutes: 30,
+      seconds: 30,
+      done: false,
+      productivityCount: 0,
+      unproductiveCount: 0,
+    });
+    this.resetTime();
+  };
+
   render() {
     const { questionNumber, productivityCount, unproductiveCount } = this.state;
+
+    // calculate productivity/anxiety ratio levels
     const plevel =
       productivityCount + unproductiveCount <= 3
         ? 100 - unproductiveCount * 20
@@ -295,11 +295,15 @@ class Home extends Component {
             (unproductiveCount / (productivityCount + unproductiveCount)) * 100
           );
 
+    // calculate progress bar color
     const progressColor = (level) => {
       return level > 60 ? "success" : level < 40 ? "danger" : "warning";
     };
+
+    // geenrate paragraph
     const paragraph =
       this.state.wordsAndStyles.length && this.generateParagraph();
+
     return (
       <div className="App">
         <div style={this.styles.mybody}>
@@ -348,7 +352,6 @@ class Home extends Component {
             }}
           >
             <Timer
-              setTimesUp={this.setTimesUp}
               setMinutes={this.setMinutes}
               setSeconds={this.setSeconds}
               addTime={(add) => (this.addTime = add)}

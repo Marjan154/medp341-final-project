@@ -61,6 +61,7 @@ export default class Timer extends Component {
     this.setState({ seconds: newTime.seconds, minutes: newTime.minutes });
   };
 
+  // resets time in parent component
   resetTime = () => {
     this.setState({ minutes: 3, seconds: 30 });
     this.componentDidMount();
