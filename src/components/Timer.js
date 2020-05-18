@@ -13,11 +13,13 @@ export default class Timer extends Component {
     // Send addTime and losetime functions to parent App
     this.props.addTime(this.addTime);
     this.props.loseTime(this.loseTime);
+    this.props.resetTime(this.resetTime);
 
     // Handles minute and seconds change
     this.myInterval = setInterval(() => {
       const { seconds, minutes } = this.state;
       if (seconds > 0) {
+        this.props.setSeconds && this.props.setSeconds(seconds - 1);
         this.setState(({ seconds }) => ({
           seconds: seconds - 1,
         }));
@@ -25,7 +27,11 @@ export default class Timer extends Component {
       if (seconds === 0) {
         if (minutes === 0) {
           clearInterval(this.myInterval);
+          this.props.setMinutes && this.props.setMinutes(0);
+          this.props.setSeconds && this.props.setSeconds(0);
         } else {
+          this.props.setMinutes && this.props.setMinutes(minutes - 1);
+          this.props.setSeconds && this.props.setSeconds(59);
           this.setState(({ minutes }) => ({
             minutes: minutes - 1,
             seconds: 59,
@@ -53,6 +59,11 @@ export default class Timer extends Component {
       currTime - lost >= 0 ? currTime - lost : 0
     );
     this.setState({ seconds: newTime.seconds, minutes: newTime.minutes });
+  };
+
+  resetTime = () => {
+    this.setState({ minutes: 3, seconds: 30 });
+    this.componentDidMount();
   };
 
   // Time conversion helpers

@@ -1,7 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
 .App {
   text-align: center;
+  font-family: "Comfortaa", cursive;
 }
 
+.title {
+  font-family: "Special Elite", cursive;
+}
+.introp {
+  font-family: "Comfortaa", cursive;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

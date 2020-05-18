@@ -16,6 +16,9 @@ class App extends Component {
       wordsAndStyles: [],
       productivityCount: 0,
       unproductiveCount: 0,
+      timesUp: false,
+      minutes: 3,
+      seconds: 30,
     };
     // 4:5 ratio
     this.goodWords = [
@@ -82,6 +85,7 @@ class App extends Component {
       margin: `${marginBy + margin}px`,
       fontWeight: fontWeights[Math.floor(Math.random() * fontWeights.length)],
       color: colors[Math.floor(Math.random() * colors.length)],
+      fontFamily: "Special Elite",
     };
   };
 
@@ -185,6 +189,17 @@ class App extends Component {
     clearInterval(myInterval);
   };
 
+  setTimesUp = () => {
+    this.setState({ timesUp: true });
+    console.log("SETTING TIME", this.state.timesUp);
+  };
+  setMinutes = (minutes) => {
+    this.setState({ minutes: minutes });
+  };
+  setSeconds = (seconds) => {
+    this.setState({ seconds: seconds });
+  };
+
   replay = () => {
     this.setState({
       minutes: 30,
@@ -192,53 +207,79 @@ class App extends Component {
       done: false,
       productivityLevel: 100,
       anxietyLevel: 0,
+      productivityCount: 0,
+      unproductiveCount: 0,
     });
+    this.resetTime();
   };
   // Sets up questions display. Handles answer and adjusts time
   displayQuestion = (question) => {
     const { situation, optionBad, optionGood } = question;
-    return (
-      <div>
-        <h2>{situation}</h2>
-        <br />
-        <Button
-          variant="secondary"
-          size="lg"
-          onClick={() => {
-            this.handleAnswer("bad");
-            this.displayTimeMessage("-20", "red");
-            this.loseTime(20);
-          }}
-          style={{
-            backgroundColor: "#1aabab",
-            margin: "5px",
-            width: "25%",
-            height: "70px",
-            fontSize: "1vw",
-          }}
-        >
-          {optionBad}
-        </Button>
-        <Button
-          variant="secondary"
-          size="lg"
-          onClick={() => {
-            this.handleAnswer("good");
-            this.displayTimeMessage("+5", "green");
-            this.addTime(5);
-          }}
-          style={{
-            backgroundColor: "#1aabab",
-            margin: "5px",
-            width: "25%",
-            height: "70px",
-            fontSize: "1vw",
-          }}
-        >
-          {optionGood}
-        </Button>
-      </div>
-    );
+    const { minutes, seconds } = this.state;
+    // if times up, display play again
+    if (minutes === 0 && seconds === 0) {
+      return (
+        <div>
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={this.replay}
+            style={{
+              backgroundColor: "#1aabab",
+              margin: "5px",
+              width: "25%",
+              height: "70px",
+              fontSize: "1vw",
+            }}
+          >
+            Play Again
+          </Button>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h2>{situation}</h2>
+          <br />
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => {
+              this.handleAnswer("bad");
+              this.displayTimeMessage("-20", "red");
+              this.loseTime(20);
+            }}
+            style={{
+              backgroundColor: "#1aabab",
+              margin: "5px",
+              width: "25%",
+              height: "70px",
+              fontSize: "1vw",
+            }}
+          >
+            {optionBad}
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => {
+              this.handleAnswer("good");
+              this.displayTimeMessage("+5", "green");
+              this.addTime(5);
+            }}
+            style={{
+              backgroundColor: "#1aabab",
+              margin: "5px",
+              width: "25%",
+              height: "70px",
+              fontSize: "1vw",
+            }}
+          >
+            {optionGood}
+          </Button>
+        </div>
+      );
+    }
   };
 
   render() {
@@ -270,9 +311,11 @@ class App extends Component {
     return (
       <div className="App">
         <div style={this.styles.mybody}>
-          <h1>Performance Simulation</h1>
+          <h1 className="title">Performance Simulation</h1>
           <br />
-          <div style={{ display: "block" }}>{paragraph}</div>
+          <div className="introp" style={{ display: "block" }}>
+            {paragraph}
+          </div>
 
           <br />
           <br />
@@ -305,11 +348,16 @@ class App extends Component {
               bottom: 20,
               left: 20,
               width: "20%",
+              font: "initial",
             }}
           >
             <Timer
+              setTimesUp={this.setTimesUp}
+              setMinutes={this.setMinutes}
+              setSeconds={this.setSeconds}
               addTime={(add) => (this.addTime = add)}
               loseTime={(lost) => (this.loseTime = lost)}
+              resetTime={(reset) => (this.resetTime = reset)}
             />
           </div>
         </div>
